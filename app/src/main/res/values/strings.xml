@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">NasaObjects</string>
+    <string name="title_home">Home</string>
+    <string name="take_picture">Take new picture</string>
+    <string name="retake_picture">Replace picture</string>
+    <string name="title_dashboard">Register object</string>
+    <string name="title_notifications">Notifications</string>
+
+</resources>
