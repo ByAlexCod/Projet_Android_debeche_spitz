@@ -21,7 +21,7 @@ object NasaService {
             .build()
 
     private var retrofit : Retrofit = Retrofit.Builder()
-            .baseUrl(https://data.nasa.gov/resource/)
+            .baseUrl("https://data.nasa.gov/resource/")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
