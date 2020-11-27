@@ -13,6 +13,7 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,7 @@ import com.example.nasaobjects.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.time.LocalDate
 
 
@@ -44,6 +46,7 @@ class DashboardFragment : Fragment() {
     private lateinit var root: View
     private lateinit var saveButton: Button
     private lateinit var objectNameText: EditText
+    private lateinit var picture: Bitmap
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel
@@ -82,7 +85,7 @@ class DashboardFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun saveObject() = withContext(Dispatchers.IO){
         val db = NasaCustomDatabase.getDatabase(root.context)
-        db.nasaObjectDao().insertAll(NasaObjectEntity(name = objectNameText.text.toString(), year = LocalDate.now().toString(), mass = 10.0))
+        db.nasaObjectDao().insertAll(NasaObjectEntity(name = objectNameText.text.toString(), year = LocalDate.now().toString(), mass = 10.0, picture = encodeImage(picture)))
 
         val notification: Notification = Notification.Builder(root.context, "aa")
                 .setSmallIcon(R.drawable.ic_launcher_background) // drawable for API 26
@@ -99,6 +102,12 @@ class DashboardFragment : Fragment() {
         }
     }
 
+    private fun encodeImage(bm: Bitmap): String? { // convert Bitmap image to Base64 string
+        val baos = ByteArrayOutputStream()
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.DEFAULT)
+    }
 
     private fun takePicture() {
         if (context?.let { checkSelfPermission(it, Manifest.permission.CAMERA) } != PackageManager.PERMISSION_GRANTED) {
@@ -129,8 +138,8 @@ class DashboardFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-
-            imageBox.setImageBitmap(data?.getExtras()?.get("data") as Bitmap?)
+            picture = (data?.getExtras()?.get("data") as Bitmap?)!!
+            imageBox.setImageBitmap(picture)
             addPictureButton.text = getString(R.string.retake_picture)
         }
     }
