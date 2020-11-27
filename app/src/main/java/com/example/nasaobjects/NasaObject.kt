@@ -10,8 +10,8 @@ class NasaObject() {
     private var year: LocalDate = LocalDate.now();
     private var picture: Bitmap= Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888);
 
-    constructor(name: String, mass: Double, year: LocalDate, picture: Bitmap ): this() {
-        this.picture = picture
+    constructor(name: String, mass: Double, year: LocalDate, picture: Bitmap? ): this() {
+        if(picture != null) this.picture = picture
         this.name = name
         this.mass = mass
         this.year = year

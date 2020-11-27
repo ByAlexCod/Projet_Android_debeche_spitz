@@ -13,9 +13,13 @@ class NasaObjectMapper {
     companion object {
         @RequiresApi(Build.VERSION_CODES.O)
         fun entityToObject(entity: NasaObjectEntity): NasaObject {
-            val imageBytes= Base64.decode(entity.picture, 0)
-            val image : Bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size) // convert base64 string to bitmap
+            var image : Bitmap? = null
+            if(entity.picture != null) {
+                val imageBytes = Base64.decode(entity.picture, 0)
+                image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size) // convert base64 string to bitmap
+            }
             return NasaObject(entity.name, entity.mass, LocalDate.parse(entity.year), image)
+
         }
     }
 

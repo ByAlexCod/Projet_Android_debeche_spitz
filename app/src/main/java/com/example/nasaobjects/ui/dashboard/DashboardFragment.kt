@@ -56,7 +56,7 @@ class DashboardFragment : Fragment() {
     private lateinit var root: View
     private lateinit var saveButton: Button
     private lateinit var objectNameText: EditText
-    private lateinit var picture: Bitmap
+    private var picture: Bitmap? = null
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel
@@ -95,14 +95,15 @@ class DashboardFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun saveObject() = withContext(Dispatchers.IO){
         val db = NasaCustomDatabase.getDatabase(root.context)
+        var encoded : String? = null
+
+        if(picture != null) encoded = encodeImage(picture!!)
         db.nasaObjectDao().insertAll(
             NasaObjectEntity(
                 name = objectNameText.text.toString(),
                 year = LocalDate.now().toString(),
                 mass = 10.0,
-                picture = encodeImage(
-                    picture
-                )
+                picture = encoded
             )
         )
 
