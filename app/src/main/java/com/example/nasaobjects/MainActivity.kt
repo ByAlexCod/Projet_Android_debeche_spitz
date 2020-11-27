@@ -1,12 +1,15 @@
 package com.example.nasaobjects
 
+import android.database.CursorWindow
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.lang.reflect.Field
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,12 +17,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        try {
+            val field: Field = CursorWindow::class.java.getDeclaredField("sCursorWindowSize")
+            field.setAccessible(true)
+            field.set(null, 100 * 1024 * 1024) //the 100MB is the new size
+        } catch (e: Exception) {
+                e.printStackTrace()
 
+        }
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.navigation_home, R.id.navigation_dashboard))
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_home, R.id.navigation_dashboard
+            )
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
