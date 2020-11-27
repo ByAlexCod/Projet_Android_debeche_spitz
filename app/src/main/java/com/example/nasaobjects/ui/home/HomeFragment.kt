@@ -59,7 +59,7 @@ class HomeFragment : Fragment() {
             NasaService.getNasaObjects().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError { e ->
-                    println(e.message)
+
                 }
                 .subscribe {
                     try {
@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
                         filteredObjectEntities.addAll(localObjects)
                         filteredObjectEntities = ArrayList(filteredObjectEntities.sortedBy { it.getName().toLowerCase(Locale.ROOT) })
                         val rvObjects = root.findViewById(R.id.nasa_objects) as RecyclerView
-                        val adapter = NasaObjectAdapter(filteredObjectEntities)
+                        val adapter = NasaObjectAdapter(filteredObjectEntities, root.context)
                         rvObjects.adapter = adapter
                         Toast.makeText(root.context, getString(R.string.toast_fetched_data), Toast.LENGTH_LONG).show()
                         rvObjects.layoutManager = LinearLayoutManager(context)
