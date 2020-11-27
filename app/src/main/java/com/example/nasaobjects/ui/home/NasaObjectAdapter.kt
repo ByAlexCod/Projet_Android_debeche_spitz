@@ -47,25 +47,24 @@ class NasaObjectAdapter(private val mObjectEntities: List<NasaObject>, private v
         val textView = viewHolder.nameTextView
         val imageView = viewHolder.getImageView
         textView.setText(nasaObjectEntity.getName() + " (" + nasaObjectEntity.getYear().year + ")")
-        if(nasaObjectEntity.getPicture() !== null) {
-            imageView.setImageBitmap(nasaObjectEntity.getPicture())
-            (imageView.parent as ConstraintLayout).setOnClickListener {
-                val image: Bitmap = nasaObjectEntity.getPicture()!!
-                imageView.post {
-                    val builder = Dialog(context)
-                    builder.requestWindowFeature(Window.FEATURE_NO_TITLE)
-                    builder.getWindow()?.setBackgroundDrawable(
-                            ColorDrawable(Color.TRANSPARENT))
+        imageView.setImageBitmap(nasaObjectEntity.getPicture())
+        (imageView.parent as ConstraintLayout).setOnClickListener {
+            val image: Bitmap = nasaObjectEntity.getPicture()!!
+            imageView.post {
+                val builder = Dialog(context)
+                builder.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                builder.getWindow()?.setBackgroundDrawable(
+                        ColorDrawable(Color.TRANSPARENT))
 
-                    val imagePopup = ImageView(context)
-                    imagePopup.setImageBitmap(image)
-                    builder.addContentView(imagePopup, RelativeLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT))
-                    builder.show()
-                }
+                val imagePopup = ImageView(context)
+                imagePopup.setImageBitmap(image)
+                builder.addContentView(imagePopup, RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT))
+                builder.show()
             }
         }
+
     }
 
 
