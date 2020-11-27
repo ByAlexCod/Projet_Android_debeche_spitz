@@ -7,4 +7,9 @@
     <string name="title_notifications">Notifications</string>
     <string name="toast_fetched_data">Fetched data successfully</string>
     <string name="save_button">Register new object</string>
+    <string name="channel_name">Nasa notifications</string>
+    <string name="channel_description" >New notification from nasa</string>
+    <string name="new_metorite_registered">New object registered</string>
+    <string name="get_impossible">Cannot fetch due to an API error</string>
+
 </resources>

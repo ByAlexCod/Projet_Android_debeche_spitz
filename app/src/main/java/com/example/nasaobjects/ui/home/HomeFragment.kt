@@ -21,6 +21,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 import java.time.LocalDate
 import java.util.*
 import java.util.stream.Collectors
@@ -61,14 +62,18 @@ class HomeFragment : Fragment() {
                     println(e.message)
                 }
                 .subscribe {
-                    var filteredObjectEntities: ArrayList<NasaObject> = ArrayList(it.stream().filter({it.getYear().year > (LocalDate.now().minusYears(15)).year}).collect(Collectors.toList()))
-                    filteredObjectEntities.addAll(localObjects)
-                    filteredObjectEntities = ArrayList(filteredObjectEntities.sortedBy { it.getName() })
-                    val rvObjects = root.findViewById(R.id.nasa_objects) as RecyclerView
-                    val adapter = NasaObjectAdapter(filteredObjectEntities)
-                    rvObjects.adapter = adapter
-                    Toast.makeText(root.context, getString(R.string.toast_fetched_data), Toast.LENGTH_LONG).show()
-                    rvObjects.layoutManager = LinearLayoutManager(context)
+                    try {
+                        var filteredObjectEntities: ArrayList<NasaObject> = ArrayList(it.stream().filter({ it.getYear().year > (LocalDate.now().minusYears(15)).year }).collect(Collectors.toList()))
+                        filteredObjectEntities.addAll(localObjects)
+                        filteredObjectEntities = ArrayList(filteredObjectEntities.sortedBy { it.getName().toLowerCase(Locale.ROOT) })
+                        val rvObjects = root.findViewById(R.id.nasa_objects) as RecyclerView
+                        val adapter = NasaObjectAdapter(filteredObjectEntities)
+                        rvObjects.adapter = adapter
+                        Toast.makeText(root.context, getString(R.string.toast_fetched_data), Toast.LENGTH_LONG).show()
+                        rvObjects.layoutManager = LinearLayoutManager(context)
+                    } catch (E: Exception) {
+                        Toast.makeText(root.context, getString(R.string.get_impossible), Toast.LENGTH_LONG)
+                    }
                 })
     }
 }

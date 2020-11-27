@@ -20,6 +20,7 @@ class NasaObjectAdapter (private val mObjectEntities: List<NasaObject>) : Recycl
         val context = parent.context
         val inflater = LayoutInflater.from(context)
         val nasaObjectView = inflater.inflate(R.layout.list_elem_nasa, parent, false)
+
         return ViewHolder(nasaObjectView)
     }
 

@@ -2,6 +2,11 @@ package com.example.nasaobjects.ui.dashboard
 
 import android.Manifest
 import android.app.Activity
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -18,7 +23,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
 import com.example.nasaobjects.NasaCustomDatabase
 import com.example.nasaobjects.NasaObjectEntity
 import com.example.nasaobjects.R
@@ -38,26 +42,38 @@ class DashboardFragment : Fragment() {
     private lateinit var root: View
     private lateinit var saveButton: Button
     private lateinit var objectNameText: EditText
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the NotificationChannel
+            val name = getString(R.string.channel_name)
+            val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val mChannel = NotificationChannel("aa", name, importance)
+            mChannel.description = descriptionText
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            val notificationManager = root.context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(mChannel)
+        }
+
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         dashboardViewModel =
                 ViewModelProvider(this).get(DashboardViewModel::class.java)
         this.root = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
         addPictureButton = root.findViewById<Button>(R.id.take_picture)
         imageBox = root.findViewById(R.id.imageBox)
         addPictureButton.setOnClickListener { this.takePicture() }
         saveButton = root.findViewById(R.id.register_button_save)
         saveButton.setOnClickListener { lifecycleScope.launch{saveObject()} }
         objectNameText = root.findViewById(R.id.register_input_name)
+        this.createNotificationChannel()
         return root
     }
 
@@ -65,6 +81,17 @@ class DashboardFragment : Fragment() {
     private suspend fun saveObject() = withContext(Dispatchers.IO){
         val db = NasaCustomDatabase.getDatabase(root.context)
         db.nasaObjectDao().insertAll(NasaObjectEntity(name = objectNameText.text.toString(), year = LocalDate.now().toString(), mass = 10.0))
+
+        val notification: Notification = Notification.Builder(root.context, "aa")
+                .setSmallIcon(R.drawable.ic_launcher_background) // drawable for API 26
+                .setWhen(System.currentTimeMillis())
+                .setAutoCancel(true)
+                .setContentTitle(getString(R.string.new_metorite_registered))
+                .setContentText(getString(R.string.new_metorite_registered))
+                .setColor(15665).build()
+
+        val notifManager = root.context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notifManager.notify(1555, notification)
     }
 
 
@@ -78,9 +105,9 @@ class DashboardFragment : Fragment() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERMISSION) {

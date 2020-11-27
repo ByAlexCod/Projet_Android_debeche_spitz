@@ -6,4 +6,11 @@
     <string name="retake_picture">Réessayer</string>
     <string name="title_dashboard">Enregistrer un objet</string>
     <string name="title_notifications">Notifications</string>
+    <string name="toast_fetched_data">Récupération des données réussi</string>
+    <string name="save_button">Enregistrer nouvel objet</string>
+    <string name="channel_name">Notifications Nasa</string>
+    <string name="channel_description" >New notification from nasa</string>
+
+    <string name="new_metorite_registered">New object registered</string>
+    <string name="get_impossible">Impossible de récupérer les données suite à une erreur de l\'api</string>
 </resources>
