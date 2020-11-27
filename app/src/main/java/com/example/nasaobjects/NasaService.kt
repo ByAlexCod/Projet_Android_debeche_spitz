@@ -11,7 +11,6 @@ import okhttp3.TlsVersion
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.time.Instant
 import java.time.LocalDate
 import java.util.*
 
@@ -24,6 +23,7 @@ object NasaService {
             .connectionSpecs(Arrays.asList(requireTls12))
             .build()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     var gson = GsonBuilder().registerTypeAdapter(LocalDate::class.java,
         JsonDeserializer<Any?> { json, type, jsonDeserializationContext ->
             LocalDate.parse(json.asJsonPrimitive.asString.split("T")[0])
@@ -41,4 +41,5 @@ object NasaService {
         val nasaRetrofit: NasaRetrofit = retrofit.create(NasaRetrofit::class.java)
         return nasaRetrofit.getAllNasaObjects()
     }
+
 }

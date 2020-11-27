@@ -1,12 +1,15 @@
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nasaobjects.NasaObject
+import com.example.nasaobjects.NasaObjectEntity
 import com.example.nasaobjects.R
 
-class NasaObjectAdapter (private val mObjects: List<NasaObject>) : RecyclerView.Adapter<NasaObjectAdapter.ViewHolder>()
+class NasaObjectAdapter (private val mObjectEntities: List<NasaObject>) : RecyclerView.Adapter<NasaObjectAdapter.ViewHolder>()
 {
 
     inner class ViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
@@ -20,13 +23,14 @@ class NasaObjectAdapter (private val mObjects: List<NasaObject>) : RecyclerView.
         return ViewHolder(nasaObjectView)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(viewHolder: NasaObjectAdapter.ViewHolder, position: Int) {
-        val nasaObject: NasaObject = mObjects.get(position)
+        val nasaObjectEntity: NasaObject = mObjectEntities.get(position)
         val textView = viewHolder.nameTextView
-        textView.setText(nasaObject.getName() + " (" + nasaObject.getYear().year + ")")
+        textView.setText(nasaObjectEntity.getName() + " (" + nasaObjectEntity.getYear().year + ")")
     }
 
     override fun getItemCount(): Int {
-        return mObjects.size
+        return mObjectEntities.size
     }
 }

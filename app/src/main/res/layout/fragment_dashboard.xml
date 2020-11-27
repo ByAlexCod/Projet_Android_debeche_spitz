@@ -28,6 +28,14 @@
         android:orientation="vertical">
 
 
+        <EditText
+            android:id="@+id/register_input_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
         <ImageView
             android:id="@+id/imageBox"
             android:layout_width="wrap_content"
@@ -35,23 +43,28 @@
             android:src="@mipmap/ic_launcher"
             android:minHeight="200dp"/>
 
+        <Button
+            android:id="@+id/take_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="29dp"
+            android:gravity="center_horizontal"
+            android:text="@string/take_picture"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <Button
+            android:id="@+id/register_button_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save_button" />
+
 
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:gravity="center_horizontal">
-    <Button
-        android:id="@+id/take_picture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/take_picture"
-        android:layout_gravity="center_horizontal|bottom"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="29dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-    </LinearLayout>
+        android:gravity="center_horizontal"></LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

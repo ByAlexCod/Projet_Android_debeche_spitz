@@ -14,7 +14,7 @@ import org.junit.Assert.*
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class NasaObjectUnitTest {
+class NasaObjectEntityUnitTest {
     private var disposable: CompositeDisposable = CompositeDisposable()
 
     @Test
