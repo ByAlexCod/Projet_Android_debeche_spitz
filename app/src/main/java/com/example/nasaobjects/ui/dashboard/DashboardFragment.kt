@@ -16,11 +16,13 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.nasaobjects.NasaCustomDatabase
@@ -92,6 +94,9 @@ class DashboardFragment : Fragment() {
 
         val notifManager = root.context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notifManager.notify(1555, notification)
+        activity?.runOnUiThread {
+            Toast.makeText(root.context, "Bravo", Toast.LENGTH_LONG).show()
+        }
     }
 
 
