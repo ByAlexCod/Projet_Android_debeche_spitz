@@ -13,6 +13,7 @@ import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 import java.time.LocalDate
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -22,23 +23,10 @@ object NasaService {
     private var requireTls12 = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
         .allEnabledTlsVersions()
         .allEnabledCipherSuites()
-            .build()
+        .build()
     private var client = OkHttpClient.Builder()
             .connectionSpecs(Arrays.asList(requireTls12))
             .callTimeout(30, TimeUnit.SECONDS)
-            .addInterceptor {
-            val request: Request = it.request()
-
-            var response: Response = it.proceed(request)
-            var tryCount = 0
-            while (!response.isSuccessful() && tryCount < 10) {
-                Log.d("intercept", "Request is not successful - $tryCount")
-                tryCount++
-                response = it.proceed(request)
-            }
-
-            return@addInterceptor response
-        }
             .build()
 
 
@@ -59,7 +47,12 @@ object NasaService {
     @RequiresApi(Build.VERSION_CODES.N)
     fun getNasaObjects(): Observable<List<NasaObject>> {
         val nasaRetrofit: NasaRetrofit = retrofit.create(NasaRetrofit::class.java)
-        return nasaRetrofit.getAllNasaObjects()
+        try {
+            return nasaRetrofit.getAllNasaObjects().retry(20)
+        } catch (e: Exception) {
+            println(e.message)
+            return Observable.empty()
+        }
     }
 
 }
